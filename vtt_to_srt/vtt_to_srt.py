@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# -*- coding: iso-8859-2 -*-
 # Jansen A. Simanullang / Jeison Cardoso
 
 """Convert of vtt to srt format"""
@@ -64,12 +65,13 @@ def convert_content(contents):
     replacement = re.sub(r"\n\n\n", "", replacement)
     replacement = re.sub(r" \.\.\.", "", replacement)
     replacement = re.sub(r"\.\.\. ", "", replacement)
-    replacement = re.sub(r"u\u0308", ":ue:", replacement)
-    replacement = re.sub(r"o\u0308", ":oe:", replacement)
-    replacement = re.sub(r"a\u0308", ":ae:", replacement)
-    replacement = re.sub(r"U\u0308", ":Ue:", replacement)
-    replacement = re.sub(r"O\u0308", ":Oe:", replacement)
-    replacement = re.sub(r"A\u0308", ":Ae:", replacement)
+    replacement = re.sub(r"u\u0308", "ü", replacement)
+    replacement = re.sub(r"o\u0308", "ö", replacement)
+    replacement = re.sub(r"a\u0308", "ä", replacement)
+    replacement = re.sub(r"U\u0308", "Ü", replacement)
+    replacement = re.sub(r"O\u0308", "Ö", replacement)
+    replacement = re.sub(r"A\u0308", "Ä", replacement)
+    #replacement = re.sub(r"A\u0308", "Ä", replacement)
     replacement = add_sequence_numbers(replacement)
     return replacement
 
@@ -111,7 +113,7 @@ def file_create(str_name_file: str, str_data):
        str_data -- dat to write
        """
     try:
-        with open(str_name_file, "w", encoding='utf-8') as file: #fix later
+        with open(str_name_file, "w", encoding='iso-8859-2') as file: #fix later
             file.writelines(str(str_data))
     except IOError:
         str_name_file = str_name_file.split(os.sep)[-1]
@@ -119,10 +121,8 @@ def file_create(str_name_file: str, str_data):
             file.writelines(str(str_data))
     #print("file created: " + str_name_file + "\n")
     #sedpath = __file__
-    #requires a sed script to back replace umlauts due to arte.tv offering faux utf-8 subs
-    #https://gist.github.com/uahim/3e0744e507bbc5577ebad9738d779701
-    sedpath = re.sub("\.py", ".sed" ,__file__)
-    os.system("sed -i -f " + sedpath + " " + str_name_file)
+    #sedpath = re.sub("\.py", ".sed" ,__file__)
+    #os.system("sed -i -f " + sedpath + " " + str_name_file)
 
 
 def read_text_file(str_name_file: str):
