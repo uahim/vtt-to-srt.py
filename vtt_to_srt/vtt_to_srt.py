@@ -119,6 +119,8 @@ def file_create(str_name_file: str, str_data):
             file.writelines(str(str_data))
     #print("file created: " + str_name_file + "\n")
     #sedpath = __file__
+    #requires a sed script to back replace umlauts due to arte.tv offering faux utf-8 subs
+    #https://gist.github.com/uahim/3e0744e507bbc5577ebad9738d779701
     sedpath = re.sub("\.py", ".sed" ,__file__)
     os.system("sed -i -f " + sedpath + " " + str_name_file)
 
