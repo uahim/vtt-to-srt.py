@@ -117,18 +117,21 @@ def file_create(str_name_file: str, str_data):
         str_name_file = str_name_file.split(os.sep)[-1]
         with open(str_name_file, "w") as file:
             file.writelines(str(str_data))
-    print("file created: " + str_name_file + "\n")
+    #print("file created: " + str_name_file + "\n")
+    #sedpath = __file__
+    sedpath = re.sub("\.py", ".sed" ,__file__)
+    os.system("sed -i -f " + sedpath + " " + str_name_file)
 
 
 def read_text_file(str_name_file: str):
     """Read a file text
 
        Keyword arguments:
-       str_name_file -- filename pat
+       str_name_file -- filename path
        """
     content: str = ''
     with open(str_name_file, mode="r", encoding='utf-8') as file:
-        print("file being read: " + str_name_file + "\n")
+        #print("file being read: " + str_name_file + "\n")
         content = file.read()
         #content = bytes(content,'iso-8859-1').decode('utf-8')
     return content
