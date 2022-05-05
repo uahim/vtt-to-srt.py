@@ -59,8 +59,17 @@ def convert_content(contents):
     replacement = re.sub(r"<c[.\w\d]*>", "", replacement)
     replacement = re.sub(r"</c>", "", replacement)
     replacement = re.sub(r"<\d\d:\d\d:\d\d.\d\d\d>", "", replacement)
-    replacement = re.sub(r"::[\-\w]+\([\-.\w\d]+\)[ ]*{[.,:;\(\) \-\w\d]+\n }\n", "", replacement)
-    replacement = re.sub(r"Style:\n##\n", "", replacement)
+    #replacement = re.sub(r"::[\-\w]+\([\-.\w\d]+\)[ ]*{[.,:;\(\) \-\w\d]+\n }\n", "", replacement)
+    replacement = re.sub(r"STYLE\n::.*{\n.*\n}", "", replacement)
+    replacement = re.sub(r"\n\n\n", "", replacement)
+    replacement = re.sub(r" \.\.\.", "", replacement)
+    replacement = re.sub(r"\.\.\. ", "", replacement)
+    replacement = re.sub(r"u\u0308", ":ue:", replacement)
+    replacement = re.sub(r"o\u0308", ":oe:", replacement)
+    replacement = re.sub(r"a\u0308", ":ae:", replacement)
+    replacement = re.sub(r"U\u0308", ":Ue:", replacement)
+    replacement = re.sub(r"O\u0308", ":Oe:", replacement)
+    replacement = re.sub(r"A\u0308", ":Ae:", replacement)
     replacement = add_sequence_numbers(replacement)
     return replacement
 
@@ -81,14 +90,16 @@ def add_sequence_numbers(contents):
        contents
        """
     output = ''
-    lines = contents.split(os.linesep)
+    
+    lines = contents.split("\n")
 
     i = 1
     for line in lines:
         if timestamp_line(line):
-            output += str(i) + os.linesep
+            output += str(i) + "\n"
             i += 1
-        output += line + os.linesep
+
+        output += line + "\n"
     return output
 
 
@@ -100,7 +111,7 @@ def file_create(str_name_file: str, str_data):
        str_data -- dat to write
        """
     try:
-        with open(str_name_file, "w", encoding='utf-8') as file:
+        with open(str_name_file, "w", encoding='utf-8') as file: #fix later
             file.writelines(str(str_data))
     except IOError:
         str_name_file = str_name_file.split(os.sep)[-1]
@@ -119,6 +130,7 @@ def read_text_file(str_name_file: str):
     with open(str_name_file, mode="r", encoding='utf-8') as file:
         print("file being read: " + str_name_file + "\n")
         content = file.read()
+        #content = bytes(content,'iso-8859-1').decode('utf-8')
     return content
 
 
